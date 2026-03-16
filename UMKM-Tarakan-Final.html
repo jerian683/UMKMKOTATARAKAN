@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>UMKM Tarakan — Bumi Paguntaka</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#080a07;--ink2:#111410;--ink3:#1c2019;--ink4:#242820;
+  --gold:#c9a84c;--goldl:#e8c97a;--goldd:#a0822a;--golddim:rgba(201,168,76,.14);
+  --cream:#f2ead8;--cream2:#e8dfc8;--creamdim:rgba(242,234,216,.55);
+  --green:#1e4a2e;--greenb:#2d7a47;--greendim:rgba(30,74,46,.15);
+  --teal:#0f3d4e;
+  --border:rgba(201,168,76,.18);--borderb:rgba(201,168,76,.35);
+  --subtle:rgba(242,234,216,.06);--subtle2:rgba(242,234,216,.1);
+  --muted:rgba(242,234,216,.45);--muted2:rgba(242,234,216,.25);
+  --font-d:'Cormorant Garamond',Georgia,serif;
+  --font-b:'DM Sans',sans-serif;
+  --font-m:'DM Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--ink);color:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%}
+button{font-family:var(--font-b);cursor:pointer;border:none;background:none}
+
+/* grain */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* CURSOR */
+#cur{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:difference}
+#cur-ring{width:34px;height:34px;border:1px solid rgba(201,168,76,.45);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:9997;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .7s var(--ease),visibility .7s}
+#loader.off{opacity:0;visibility:hidden}
+.ld-title{font-family:var(--font-d);font-size:26px;font-weight:600;letter-spacing:3px;color:var(--gold);animation:ldpulse 1.6s ease-in-out infinite}
+.ld-sub{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-top:-8px}
+.ld-line{width:140px;height:1px;background:var(--subtle2);overflow:hidden}
+.ld-line::after{content:'';display:block;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:ldsweep 1.2s ease-in-out infinite}
+@keyframes ldpulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes ldsweep{from{transform:translateX(-100%)}to{transform:translateX(200%)}}
+
+/* NAVBAR */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:22px 52px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(8,10,7,.9);backdrop-filter:blur(24px);padding:14px 52px;border-color:var(--subtle2)}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-emblem{width:36px;height:36px;flex-shrink:0}
+.nav-brand strong{display:block;font-family:var(--font-d);font-size:16px;font-weight:600;letter-spacing:.5px;color:var(--cream)}
+.nav-brand span{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-top:2px}
+.nav-links{display:flex;gap:28px;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-links a{font-size:11.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--muted);transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s var(--ease)}
+.nav-links a:hover,.nav-links a.on{color:var(--cream)}
+.nav-links a:hover::after,.nav-links a.on::after{width:100%}
+.nav-act{display:flex;gap:12px}
+.nb-ol{padding:8px 20px;border:1px solid var(--border);font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);transition:all .2s}
+.nb-ol:hover{background:var(--golddim)}
+.nb-fl{padding:8px 20px;background:var(--gold);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);transition:all .2s}
+.nb-fl:hover{background:var(--goldl)}
+
+/* ================================
+   HERO — Full cinematic
+   ================================ */
+.hero{height:100vh;min-height:680px;position:relative;display:flex;align-items:flex-end;overflow:hidden}
+/* Wikimedia Commons - Tarakan aerial, free license */
+.hero-img{position:absolute;inset:0;background:#0a1008;overflow:hidden}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.5) saturate(.8);transition:transform 14s ease-out}
+.hero-img img.loaded{transform:scale(1.05)}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(30,74,46,.25) 0%,transparent 65%)}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(170deg,rgba(8,10,7,.4) 0%,rgba(8,10,7,.6) 35%,rgba(8,10,7,.95) 100%)}
+
+/* Big Tidung Motif SVG overlay */
+.hero-motif-wrap{position:absolute;right:-5%;top:0;bottom:0;width:60%;display:flex;align-items:center;pointer-events:none}
+.hero-motif-svg{width:100%;height:auto;opacity:0;animation:motifIn 1.8s var(--ease) .9s forwards}
+@keyframes motifIn{to{opacity:.06}}
+
+/* Gold diagonal line accent */
+.hero-line{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.hero-line::before{content:'';position:absolute;top:-10%;left:42%;width:1px;height:130%;background:linear-gradient(180deg,transparent,rgba(201,168,76,.25) 30%,rgba(201,168,76,.12) 70%,transparent);transform:rotate(8deg);transform-origin:top center}
+
+.hero-content{position:relative;z-index:2;padding:0 52px 80px;max-width:700px}
+.h-eye{display:inline-flex;align-items:center;gap:10px;margin-bottom:24px;opacity:0;animation:sup .9s var(--ease) .3s forwards}
+.h-eye-line{width:36px;height:1px;background:var(--gold)}
+.h-eye-text{font-size:10px;font-weight:500;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold)}
+.h-title{font-family:var(--font-d);font-size:clamp(52px,7vw,100px);font-weight:400;line-height:.97;letter-spacing:-1.5px;color:var(--cream);margin-bottom:24px;opacity:0;animation:sup .9s var(--ease) .5s forwards}
+.h-title em{font-style:italic;color:var(--gold);display:block}
+.h-title strong{font-weight:700;font-size:.72em;display:block;letter-spacing:2px}
+.h-sub{font-size:14.5px;font-weight:300;line-height:1.75;color:var(--muted);max-width:440px;margin-bottom:36px;opacity:0;animation:sup .9s var(--ease) .7s forwards}
+.h-ctas{display:flex;align-items:center;gap:20px;opacity:0;animation:sup .9s var(--ease) .9s forwards}
+.h-cta1{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;background:var(--gold);color:var(--ink);font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .3s var(--ease);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%)}
+.h-cta1:hover{background:var(--goldl);transform:translateY(-2px)}
+.h-cta2{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:2px;transition:all .2s}
+.h-cta2:hover{color:var(--cream)}
+
+/* Stats bar */
+.h-stats{position:absolute;bottom:0;left:0;right:0;z-index:2;display:flex;background:rgba(8,10,7,.82);backdrop-filter:blur(20px);border-top:1px solid var(--subtle2);opacity:0;animation:sup .8s var(--ease) 1.1s forwards}
+.h-stat{flex:1;padding:24px 36px;border-right:1px solid var(--subtle2);display:flex;align-items:center;gap:14px;transition:background .2s}
+.h-stat:last-child{border-right:none}
+.h-stat:hover{background:rgba(201,168,76,.04)}
+.h-snum{font-family:var(--font-d);font-size:36px;font-weight:600;color:var(--gold);line-height:1}
+.h-snum sup{font-size:17px}
+.h-slbl{font-size:10.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block}
+.h-sdesc{font-size:11.5px;color:var(--muted2);display:block;margin-top:2px}
+
+@keyframes sup{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* TICKER */
+.ticker{background:var(--ink2);border-bottom:1px solid var(--border);padding:10px 0;overflow:hidden;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--ink2),transparent)}
+.ticker::after{right:0;background:linear-gradient(-90deg,var(--ink2),transparent)}
+.ticker-t{display:flex;white-space:nowrap;animation:tick 35s linear infinite}
+.ticker-i{display:inline-flex;align-items:center;gap:8px;padding:0 28px;font-size:11px;color:var(--muted2);border-right:1px solid var(--subtle2)}
+.ticker-i .dot{width:3px;height:3px;border-radius:50%;background:var(--gold);flex-shrink:0}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* UTILS */
+.wrap{max-width:1320px;margin:0 auto;padding:0 52px}
+.sec{padding:96px 52px}
+.sec-alt{background:var(--ink2)}
+.eye{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eye-line{width:28px;height:1px;background:var(--gold)}
+.eye-txt{font-size:9.5px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.sec-h{font-family:var(--font-d);font-size:clamp(34px,3.5vw,54px);font-weight:400;line-height:1.08;letter-spacing:-.5px;color:var(--cream);margin-bottom:14px}
+.sec-h em{font-style:italic;color:var(--gold)}
+.sec-sub{font-size:13.5px;font-weight:300;line-height:1.75;color:var(--muted);max-width:500px;margin-bottom:48px}
+.sec-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:44px}
+.sec-lnk{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);padding-bottom:2px;transition:all .2s}
+.sec-lnk:hover{color:var(--goldl)}
+.div-line{width:36px;height:2px;background:linear-gradient(90deg,var(--gold),var(--green));margin-top:8px}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.40s}.d6{transition-delay:.48s}
+
+/* ================================
+   IDENTITAS BUDAYA STRIP
+   ================================ */
+.budaya-strip{background:var(--ink3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 52px}
+.budaya-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--subtle);border:1px solid var(--subtle)}
+.budaya-item{background:var(--ink3);padding:28px 28px;display:flex;align-items:flex-start;gap:16px;transition:background .25s;cursor:pointer}
+.budaya-item:hover{background:rgba(201,168,76,.05)}
+.bud-icon{font-size:28px;flex-shrink:0;margin-top:2px}
+.bud-name{font-family:var(--font-d);font-size:17px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.bud-desc{font-size:11.5px;font-weight:300;line-height:1.6;color:var(--muted)}
+
+/* ================================
+   KATEGORI — Tall Photo Cards
+   ================================ */
+.kat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--subtle2);border:1px solid var(--subtle2);margin-bottom:80px}
+.kat-card{position:relative;overflow:hidden;cursor:pointer;background:var(--ink2)}
+.kat-card:hover{z-index:2}
+.kat-photo{width:100%;aspect-ratio:2/3;position:relative;overflow:hidden}
+.kat-photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease),filter .4s;filter:brightness(.7) saturate(.75) sepia(.15)}
+.kat-card:hover .kat-photo img{transform:scale(1.1);filter:brightness(.85) saturate(1) sepia(0)}
+.kat-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,10,7,.92) 0%,rgba(8,10,7,.2) 55%,transparent 100%)}
+.kat-body{position:absolute;bottom:0;left:0;right:0;padding:18px 16px;z-index:2}
+.kat-ic{font-size:20px;margin-bottom:7px}
+.kat-nm{font-family:var(--font-d);font-size:17px;font-weight:600;color:var(--cream)}
+.kat-ct{font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-top:3px}
+.kat-arr{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:var(--golddim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(6px);transition:all .3s var(--ease);color:var(--gold);font-size:12px}
+.kat-card:hover .kat-arr{opacity:1;transform:none}
+
+/* ================================
+   HERO BUDAYA — Full width feature
+   ================================ */
+.budaya-feature{position:relative;height:520px;overflow:hidden;margin-bottom:0}
+.bf-img{position:absolute;inset:0}
+.bf-img img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:brightness(.45) saturate(.7)}
+.bf-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,7,.95) 0%,rgba(8,10,7,.7) 45%,rgba(8,10,7,.2) 100%)}
+.bf-content{position:absolute;inset:0;display:flex;align-items:center;padding:0 52px}
+.bf-inner{max-width:560px}
+.bf-tag{display:inline-flex;align-items:center;gap:8px;font-size:9.5px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.bf-tag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.bf-title{font-family:var(--font-d);font-size:clamp(36px,4vw,60px);font-weight:400;line-height:1.08;color:var(--cream);margin-bottom:16px}
+.bf-title em{font-style:italic;color:var(--gold)}
+.bf-desc{font-size:13.5px;font-weight:300;line-height:1.8;color:var(--creamdim);margin-bottom:28px;max-width:440px}
+.bf-cta{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1px solid var(--border);font-size:10.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);transition:all .25s}
+.bf-cta:hover{background:var(--golddim);border-color:var(--borderb)}
+/* Right side - Bekantan SVG illustration */
+.bf-right{position:absolute;right:52px;top:50%;transform:translateY(-50%);width:320px;opacity:0;animation:fadeR .9s var(--ease) .5s forwards}
+@keyframes fadeR{from{opacity:0;transform:translate(20px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
+
+/* ================================
+   UMKM BENTO — Luxury Grid
+   ================================ */
+.bento{display:grid;grid-template-columns:1.45fr 1fr 1fr;grid-template-rows:auto auto;gap:14px;margin-bottom:80px}
+.bc{background:var(--ink2);border:1px solid var(--subtle2);overflow:hidden;position:relative;cursor:pointer;transition:border-color .3s,transform .45s var(--ease)}
+.bc:hover{border-color:var(--border);transform:translateY(-5px)}
+.bc.ft{grid-row:span 2}
+.bc-img{width:100%;overflow:hidden;position:relative}
+.bc.ft .bc-img{position:absolute;inset:0}
+.bc-img img{width:100%;height:220px;object-fit:cover;transition:transform .7s var(--ease),filter .4s;filter:brightness(.75) saturate(.8) sepia(.12)}
+.bc.ft .bc-img img{height:100%;filter:brightness(.6) saturate(.8) sepia(.15)}
+.bc:hover .bc-img img{transform:scale(1.07);filter:brightness(.88) saturate(1) sepia(0)}
+.bc-imgov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,10,7,.9) 0%,transparent 55%)}
+.bc.ft .bc-imgov{background:linear-gradient(0deg,rgba(8,10,7,.96) 0%,rgba(8,10,7,.35) 50%,transparent 80%)}
+.bc-body{padding:22px 24px 24px}
+.bc.ft .bc-body{position:absolute;bottom:0;left:0;right:0}
+.bc-tag{display:inline-flex;align-items:center;gap:7px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.bc-tag::before{content:'';width:18px;height:1px;background:var(--gold)}
+.bc-name{font-family:var(--font-d);font-size:22px;font-weight:500;color:var(--cream);line-height:1.2;margin-bottom:8px}
+.bc.ft .bc-name{font-size:30px}
+.bc-meta{display:flex;gap:14px;font-size:11px;color:var(--muted);margin-bottom:10px}
+.bc-desc{font-size:12px;font-weight:300;line-height:1.65;color:rgba(242,234,216,.45);margin-bottom:14px}
+.bc-foot{display:flex;align-items:center;justify-content:space-between}
+.bc-rat{font-size:12px;font-weight:500;color:var(--gold)}
+.bc-lnk{font-size:9.5px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);padding-bottom:1px;transition:border-color .2s}
+.bc-lnk:hover{border-color:var(--gold)}
+.bc-vb{display:flex;gap:6px;padding:10px 24px 16px;overflow-x:auto;scrollbar-width:none}
+.bc-vb::-webkit-scrollbar{display:none}
+.bc-vi{flex-shrink:0;width:56px}
+.bc-vi-img{width:56px;height:56px;border-radius:3px;overflow:hidden}
+.bc-vi-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.8)}
+.bc-vi-p{font-size:9.5px;color:var(--gold);margin-top:4px;font-weight:600}
+
+/* ================================
+   PRODUK — Editorial Magazine
+   ================================ */
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-bottom:80px}
+.pk{position:relative;cursor:pointer;transition:transform .45s var(--ease)}
+.pk:hover{transform:translateY(-7px)}
+.pk-img{width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;background:var(--ink3);margin-bottom:15px}
+.pk-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease),filter .4s;filter:brightness(.8) saturate(.85) sepia(.1)}
+.pk:hover .pk-img img{transform:scale(1.07);filter:brightness(.95) saturate(1) sepia(0)}
+.pk-bdg{position:absolute;top:11px;left:11px;z-index:2;background:var(--ink);border:1px solid var(--border);padding:4px 10px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.pk-wish{position:absolute;top:11px;right:11px;z-index:2;width:29px;height:29px;border-radius:50%;background:rgba(8,10,7,.75);backdrop-filter:blur(6px);border:1px solid var(--subtle2);display:flex;align-items:center;justify-content:center;font-size:13px;transition:background .2s}
+.pk-wish:hover{background:var(--golddim)}
+.pk-brand{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.pk-name{font-family:var(--font-d);font-size:18px;font-weight:400;color:var(--cream);line-height:1.25;margin-bottom:9px}
+.pk-bot{display:flex;align-items:center;justify-content:space-between}
+.pk-price{font-size:14px;font-weight:500;color:var(--cream)}
+.pk-star{font-size:11px;color:var(--gold)}
+
+/* ================================
+   PETA SECTION
+   ================================ */
+.peta-wrap{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:center;position:relative}
+.peta-map{position:relative;background:var(--ink3);border:1px solid var(--subtle2);height:400px;overflow:hidden}
+.peta-map-grid{position:absolute;inset:0;background-image:linear-gradient(var(--subtle) 1px,transparent 1px),linear-gradient(90deg,var(--subtle) 1px,transparent 1px);background-size:36px 36px}
+.peta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;background:radial-gradient(circle,rgba(30,74,46,.28) 0%,transparent 70%);border-radius:50%;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.25)}}
+.map-pin{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.pin-dot{width:9px;height:9px;border-radius:50%;position:relative}
+.pin-dot::before{content:'';position:absolute;inset:-7px;border-radius:50%;border:1px solid;animation:pring 2.2s ease-out infinite}
+.pin-dot::after{content:'';position:absolute;inset:-14px;border-radius:50%;border:1px solid;animation:pring 2.2s ease-out .35s infinite;opacity:.5}
+@keyframes pring{0%{transform:scale(.5);opacity:.6}100%{transform:scale(2);opacity:0}}
+.pin-lbl{background:rgba(8,10,7,.88);border:1px solid var(--border);padding:3px 9px;font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--cream);white-space:nowrap}
+.pin-sub{font-size:9px;color:var(--gold)}
+
+/* ================================
+   BERITA
+   ================================ */
+.berita-grid{display:grid;grid-template-columns:1.65fr 1fr;gap:18px;margin-bottom:80px}
+.bh{background:var(--ink2);border:1px solid var(--subtle2);overflow:hidden;cursor:pointer;transition:border-color .3s;text-decoration:none;color:inherit;display:block}
+.bh:hover{border-color:var(--border)}
+.bh-img{height:240px;overflow:hidden;position:relative}
+.bh-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.7) saturate(.75);transition:transform .7s var(--ease),filter .4s}
+.bh:hover .bh-img img{transform:scale(1.04);filter:brightness(.85) saturate(.9)}
+.bh-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(8,10,7,.88) 0%,transparent 55%)}
+.bh-body{padding:22px 26px}
+.bh-tag{display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.bh-tag::before{content:'';width:18px;height:1px;background:var(--gold)}
+.bh-title{font-family:var(--font-d);font-size:22px;font-weight:500;line-height:1.3;color:var(--cream);margin-bottom:9px}
+.bh-ex{font-size:12.5px;font-weight:300;line-height:1.65;color:var(--muted);margin-bottom:12px}
+.bh-date{font-size:10.5px;color:var(--muted2);letter-spacing:.5px}
+.bl-list{display:flex;flex-direction:column;gap:0}
+.bl{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--subtle2);cursor:pointer;text-decoration:none;color:inherit;transition:background .2s}
+.bl:first-child{padding-top:0}
+.bl:last-child{border-bottom:none;padding-bottom:0}
+.bl-img{width:76px;height:76px;flex-shrink:0;overflow:hidden}
+.bl-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(.7);transition:filter .3s}
+.bl:hover .bl-img img{filter:brightness(.95) saturate(1)}
+.bl-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.bl-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.bl-title{font-family:var(--font-d);font-size:14.5px;font-weight:500;color:var(--cream);line-height:1.3}
+.bl-date{font-size:10px;color:var(--muted2)}
+
+/* ================================
+   PROGRAM
+   ================================ */
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--subtle2);border:1px solid var(--subtle2);margin-bottom:80px}
+.pg{background:var(--ink2);padding:40px;transition:background .25s;cursor:pointer}
+.pg:hover{background:rgba(201,168,76,.04)}
+.pg-num{font-family:var(--font-m);font-size:10.5px;color:var(--gold);letter-spacing:1px;margin-bottom:22px}
+.pg-icon{font-size:26px;margin-bottom:18px}
+.pg-name{font-family:var(--font-d);font-size:21px;font-weight:600;color:var(--cream);line-height:1.2;margin-bottom:10px}
+.pg-desc{font-size:12.5px;font-weight:300;line-height:1.75;color:var(--muted);margin-bottom:22px}
+.pg-lnk{font-size:9.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:7px}
+
+/* ================================
+   CTA BANNER
+   ================================ */
+.cta-banner{background:var(--ink2);border:1px solid var(--border);padding:52px 56px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:40px;position:relative;overflow:hidden;margin:0 52px 96px}
+.cta-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 40%,var(--gold) 60%,transparent)}
+.cta-banner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3) 40%,rgba(201,168,76,.3) 60%,transparent)}
+.cb-motif{position:absolute;right:-20px;top:50%;transform:translateY(-50%);width:240px;opacity:.05;pointer-events:none}
+.cb-title{font-family:var(--font-d);font-size:clamp(30px,3vw,44px);font-weight:400;line-height:1.1;color:var(--cream);margin-bottom:10px}
+.cb-title em{font-style:italic;color:var(--gold)}
+.cb-desc{font-size:13px;font-weight:300;color:var(--muted);line-height:1.65;max-width:500px}
+.cb-btns{display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.cb-b1{padding:13px 30px;background:var(--gold);color:var(--ink);font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;transition:background .2s;white-space:nowrap}
+.cb-b1:hover{background:var(--goldl)}
+.cb-b2{padding:13px 30px;border:1px solid var(--border);color:var(--gold);font-size:10.5px;font-weight:500;letter-spacing:2px;text-transform:uppercase;text-align:center;transition:all .2s;white-space:nowrap}
+.cb-b2:hover{background:var(--golddim)}
+
+/* ================================
+   FOOTER
+   ================================ */
+footer{background:var(--ink);border-top:1px solid var(--subtle2);padding:72px 52px 36px}
+.ft-top{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:44px;margin-bottom:56px}
+.ft-logo{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.ft-brand strong{display:block;font-family:var(--font-d);font-size:18px;font-weight:600;color:var(--cream)}
+.ft-brand span{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-top:3px}
+.ft-desc{font-size:12px;font-weight:300;line-height:1.8;color:rgba(242,234,216,.35);max-width:250px;margin-bottom:22px}
+.ft-soc{display:flex;gap:10px}
+.ft-s{width:33px;height:33px;border:1px solid var(--subtle2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--muted);transition:all .2s}
+.ft-s:hover{background:var(--golddim);border-color:var(--border);color:var(--gold)}
+.ft-col h4{font-size:9.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.ft-col a{display:block;font-size:12px;font-weight:300;color:rgba(242,234,216,.35);margin-bottom:11px;transition:color .2s}
+.ft-col a:hover{color:var(--cream)}
+.ft-bot{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid var(--subtle)}
+.ft-bot p{font-size:11px;color:rgba(242,234,216,.2)}
+.ft-bot-lnks{display:flex;gap:22px}
+.ft-bot-lnks a{font-size:10.5px;color:rgba(242,234,216,.2);transition:color .2s}
+.ft-bot-lnks a:hover{color:var(--muted)}
+.ft-cr{font-family:var(--font-m);font-size:10px;color:rgba(242,234,216,.12);letter-spacing:.5px}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--border)}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-title">UMKM Tarakan</div>
+  <div class="ld-sub">Bumi Paguntaka</div>
+  <div class="ld-line"></div>
+</div>
+
+<!-- ================================
+     NAVBAR
+     ================================ -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#">
+    <svg class="nav-emblem" viewBox="0 0 36 36" fill="none">
+      <!-- Tidung Diamond Emblem -->
+      <path d="M18 1L35 18L18 35L1 18Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+      <path d="M18 7L29 18L18 29L7 18Z" stroke="#c9a84c" stroke-width=".8" fill="none" opacity=".7"/>
+      <path d="M18 13L23 18L18 23L13 18Z" stroke="#c9a84c" stroke-width=".6" fill="none" opacity=".5"/>
+      <circle cx="18" cy="18" r="3.5" fill="#c9a84c" opacity=".85"/>
+      <circle cx="18" cy="1" r="1.5" fill="#c9a84c" opacity=".5"/>
+      <circle cx="18" cy="35" r="1.5" fill="#c9a84c" opacity=".5"/>
+      <circle cx="1" cy="18" r="1.5" fill="#c9a84c" opacity=".5"/>
+      <circle cx="35" cy="18" r="1.5" fill="#c9a84c" opacity=".5"/>
+      <path d="M1 18H35M18 1V35" stroke="#c9a84c" stroke-width=".3" opacity=".3"/>
+    </svg>
+    <div class="nav-brand">
+      <strong>UMKM Tarakan</strong>
+      <span>Bumi Paguntaka</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#" class="on">Beranda</a>
+    <a href="#kategori">Kategori</a>
+    <a href="#umkm">Direktori</a>
+    <a href="#produk">Produk</a>
+    <a href="#program">Program</a>
+    <a href="#berita">Berita</a>
+  </div>
+  <div class="nav-act">
+    <a class="nb-ol" href="#">Masuk</a>
+    <a class="nb-fl" href="#">Daftar UMKM</a>
+  </div>
+</nav>
+
+<!-- ================================
+     HERO — Foto Udara Kota Tarakan
+     ================================ -->
+<section class="hero">
+  <div class="hero-img">
+    <!-- Wikimedia Commons: Tarakan City aerial view - free license CC BY-SA -->
+    <img id="heroImg" src="" alt="Kota Tarakan dari udara">
+  </div>
+  <div class="hero-vignette"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-line"></div>
+
+  <!-- Motif Tidung Besar -->
+  <div class="hero-motif-wrap">
+    <svg class="hero-motif-svg" viewBox="0 0 700 700" fill="none">
+      <!-- Outer diamond rings -->
+      <path d="M350 15L685 350L350 685L15 350Z" stroke="white" stroke-width="1.5"/>
+      <path d="M350 70L630 350L350 630L70 350Z" stroke="white" stroke-width="1.2"/>
+      <path d="M350 130L570 350L350 570L130 350Z" stroke="white" stroke-width="1"/>
+      <path d="M350 190L510 350L350 510L190 350Z" stroke="white" stroke-width=".8"/>
+      <path d="M350 250L450 350L350 450L250 350Z" stroke="white" stroke-width=".6"/>
+      <!-- Cross and diagonals -->
+      <path d="M15 350H685M350 15V685" stroke="white" stroke-width=".4" opacity=".5"/>
+      <path d="M90 90L610 610M610 90L90 610" stroke="white" stroke-width=".3" opacity=".3"/>
+      <!-- Diamond dots -->
+      <circle cx="350" cy="15" r="5" fill="white" opacity=".5"/>
+      <circle cx="350" cy="685" r="5" fill="white" opacity=".5"/>
+      <circle cx="15" cy="350" r="5" fill="white" opacity=".5"/>
+      <circle cx="685" cy="350" r="5" fill="white" opacity=".5"/>
+      <circle cx="350" cy="350" r="10" fill="white" opacity=".25"/>
+      <circle cx="350" cy="350" r="25" stroke="white" stroke-width=".5" fill="none" opacity=".2"/>
+      <!-- Tidung ornament corners -->
+      <circle cx="520" cy="180" r="4" fill="rgba(201,168,76,.6)"/>
+      <circle cx="180" cy="520" r="4" fill="rgba(201,168,76,.6)"/>
+      <circle cx="520" cy="520" r="4" fill="rgba(201,168,76,.6)"/>
+      <circle cx="180" cy="180" r="4" fill="rgba(201,168,76,.6)"/>
+      <!-- Floral diamond motif (Tidung weaving pattern) -->
+      <path d="M350 200 Q380 270 350 300 Q320 270 350 200Z" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+      <path d="M350 400 Q380 430 350 500 Q320 430 350 400Z" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+      <path d="M200 350 Q270 380 300 350 Q270 320 200 350Z" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+      <path d="M400 350 Q430 380 500 350 Q430 320 400 350Z" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="h-eye">
+      <div class="h-eye-line"></div>
+      <div class="h-eye-text">Platform UMKM Resmi — Kota Tarakan, Kalimantan Utara</div>
+    </div>
+    <h1 class="h-title">
+      Ekonomi Lokal<br>
+      <em>Bumi</em>
+      <strong>Paguntaka</strong>
+    </h1>
+    <p class="h-sub">Ribuan pelaku usaha dari tanah Tidung bersatu dalam satu platform digital resmi. Dari kuliner pesisir hingga batik warisan leluhur — semua ada di sini.</p>
+    <div class="h-ctas">
+      <a class="h-cta1" href="#umkm">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Jelajahi UMKM
+      </a>
+      <a class="h-cta2" href="#program">
+        Daftarkan Usaha
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="h-stats">
+    <div class="h-stat">
+      <div class="h-snum">2.4<sup>rb</sup></div>
+      <div><span class="h-slbl">UMKM Terdaftar</span><span class="h-sdesc">Aktif di 4 kecamatan</span></div>
+    </div>
+    <div class="h-stat">
+      <div class="h-snum">18<sup>rb</sup></div>
+      <div><span class="h-slbl">Tenaga Kerja</span><span class="h-sdesc">Terserap sektor UMKM</span></div>
+    </div>
+    <div class="h-stat">
+      <div class="h-snum">Rp4<sup>M</sup></div>
+      <div><span class="h-slbl">Omzet / Bulan</span><span class="h-sdesc">Perputaran ekonomi lokal</span></div>
+    </div>
+    <div class="h-stat">
+      <div class="h-snum">340<sup>+</sup></div>
+      <div><span class="h-slbl">UMKM Naik Kelas</span><span class="h-sdesc">Program pembinaan aktif</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-t" id="tick">
+    <span class="ticker-i"><span class="dot"></span>Program Digitalisasi UMKM 2025 — Pendaftaran Dibuka</span>
+    <span class="ticker-i"><span class="dot"></span>Pelatihan Digital Marketing Gratis untuk Pelaku UMKM Tarakan</span>
+    <span class="ticker-i"><span class="dot"></span>KUR UMKM 2025 — Bunga 3% per Tahun, Pinjaman hingga Rp 500 Juta</span>
+    <span class="ticker-i"><span class="dot"></span>Pameran UMKM Tarakan — Februari 2025</span>
+    <span class="ticker-i"><span class="dot"></span>Tari Tungal Lingkuda Suku Tidung — Warisan Budaya Takbenda Indonesia 2024</span>
+    <span class="ticker-i"><span class="dot"></span>KKMB Tarakan: 45 Ekor Bekantan Dilindungi di Hutan Mangrove 22 Hektar</span>
+    <span class="ticker-i"><span class="dot"></span>Program Digitalisasi UMKM 2025 — Pendaftaran Dibuka</span>
+    <span class="ticker-i"><span class="dot"></span>Pelatihan Digital Marketing Gratis untuk Pelaku UMKM Tarakan</span>
+    <span class="ticker-i"><span class="dot"></span>KUR UMKM 2025 — Bunga 3% per Tahun, Pinjaman hingga Rp 500 Juta</span>
+    <span class="ticker-i"><span class="dot"></span>Pameran UMKM Tarakan — Februari 2025</span>
+    <span class="ticker-i"><span class="dot"></span>Tari Tungal Lingkuda Suku Tidung — Warisan Budaya Takbenda Indonesia 2024</span>
+    <span class="ticker-i"><span class="dot"></span>KKMB Tarakan: 45 Ekor Bekantan Dilindungi di Hutan Mangrove 22 Hektar</span>
+  </div>
+</div>
+
+<!-- ================================
+     IDENTITAS BUDAYA TARAKAN
+     ================================ -->
+<div class="budaya-strip rv">
+  <div class="budaya-inner">
+    <div class="budaya-item">
+      <div class="bud-icon">🦊</div>
+      <div><div class="bud-name">Bekantan</div><div class="bud-desc">Primata endemik Kalimantan — ikon wisata KKMB Tarakan, 45 ekor terlindungi</div></div>
+    </div>
+    <div class="budaya-item">
+      <div class="bud-icon">💃</div>
+      <div><div class="bud-name">Tari Jepen</div><div class="bud-desc">Tarian asli Suku Tidung — ekspresi kegembiraan dengan irama musik Tingkilan</div></div>
+    </div>
+    <div class="budaya-item">
+      <div class="bud-icon">🏛️</div>
+      <div><div class="bud-name">Baloy Mayo</div><div class="bud-desc">Rumah adat Suku Tidung — simbol kebudayaan dan kebanggaan Bumi Paguntaka</div></div>
+    </div>
+    <div class="budaya-item">
+      <div class="bud-icon">🌊</div>
+      <div><div class="bud-name">Festival Iraw Tengkayu</div><div class="bud-desc">Festival budaya pesisir Tidung yang mendunia — melarung sesaji ke laut</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================
+     KATEGORI
+     ================================ -->
+<section class="sec" id="kategori">
+  <div class="wrap">
+    <div class="sec-row">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Sektor Usaha</div></div>
+        <h2 class="sec-h rv d1">Pilih <em>Kategori</em><br>UMKM Tarakan</h2>
+        <div class="div-line rv d2"></div>
+      </div>
+      <a class="sec-lnk rv" href="#">Semua Kategori <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="kat-grid rv d1">
+      <!-- Kuliner: pasar ikan Tarakan -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-kuliner">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Indonesian_seafood.jpg/640px-Indonesian_seafood.jpg" src="" alt="Kuliner Tarakan"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">🍽️</div><div class="kat-nm">Kuliner</div><div class="kat-ct">842 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+      <!-- Fashion: batik Tidung -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-fashion/">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Batik_indonesia.jpg/640px-Batik_indonesia.jpg" src="" alt="Fashion Batik"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">👗</div><div class="kat-nm">Fashion</div><div class="kat-ct">436 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+      <!-- Pertanian: sawah Kalimantan -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-pertanian/">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Banaue_Rice_Terraces_2.jpg/640px-Banaue_Rice_Terraces_2.jpg" src="" alt="Pertanian"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">🌾</div><div class="kat-nm">Pertanian</div><div class="kat-ct">194 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+      <!-- Perikanan: nelayan Tarakan -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-perikanan/">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Indonesian_fishermen.jpg/640px-Indonesian_fishermen.jpg" src="" alt="Perikanan"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">🐟</div><div class="kat-nm">Perikanan</div><div class="kat-ct">275 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+      <!-- Peternakan -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-peternakan/">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Borneo_jungle.jpg/640px-Borneo_jungle.jpg" src="" alt="Peternakan"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">🐄</div><div class="kat-nm">Peternakan</div><div class="kat-ct">128 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+      <!-- Jasa -->
+      <a class="kat-card" href="http://portal.tarakankota.go.id/page/umkm-jasa/">
+        <div class="kat-photo"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Tarakan_City.jpg/640px-Tarakan_City.jpg" src="" alt="Jasa Tarakan"></div>
+        <div class="kat-overlay"></div>
+        <div class="kat-body"><div class="kat-ic">🔧</div><div class="kat-nm">Jasa</div><div class="kat-ct">341 Usaha</div></div>
+        <div class="kat-arr">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     BUDAYA FEATURE: Tari Jepen + Bekantan
+     ================================ -->
+<div class="budaya-feature rv" id="budaya">
+  <div class="bf-img">
+    <!-- Foto mangrove/alam Kalimantan Utara - Wikimedia Commons free -->
+    <img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Mangrove_sunset.jpg/1280px-Mangrove_sunset.jpg" src="" alt="Mangrove Tarakan">
+  </div>
+  <div class="bf-overlay"></div>
+  <div class="bf-content">
+    <div class="bf-inner">
+      <div class="bf-tag">Warisan Budaya Tak Benda Indonesia</div>
+      <h2 class="bf-title">Suku <em>Tidung</em><br>Jiwa Bumi Paguntaka</h2>
+      <p class="bf-desc">Tarakan adalah tanah Suku Tidung — penjaga hutan mangrove, penutur Tari Jepen, dan pembangun peradaban pesisir Kalimantan Utara yang kaya sejak abad ke-5. Identitas ini hidup di setiap produk UMKM lokal.</p>
+      <a class="bf-cta" href="#">
+        Kenali Budaya Tarakan
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+  <!-- Bekantan SVG Illustration (simplified artistic) -->
+  <div class="bf-right">
+    <svg viewBox="0 0 280 360" fill="none" xmlns="http://www.w3.org/2000/svg" opacity=".75">
+      <!-- Bekantan artistic silhouette - simplified iconic -->
+      <ellipse cx="140" cy="120" rx="55" ry="65" fill="rgba(201,168,76,.12)" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+      <!-- Big nose -->
+      <ellipse cx="140" cy="140" rx="22" ry="28" fill="rgba(201,168,76,.2)" stroke="rgba(201,168,76,.5)" stroke-width="1.2"/>
+      <!-- Eyes -->
+      <circle cx="120" cy="108" r="7" fill="rgba(201,168,76,.25)" stroke="rgba(201,168,76,.6)" stroke-width="1"/>
+      <circle cx="160" cy="108" r="7" fill="rgba(201,168,76,.25)" stroke="rgba(201,168,76,.6)" stroke-width="1"/>
+      <circle cx="121" cy="108" r="3" fill="rgba(201,168,76,.8)"/>
+      <circle cx="161" cy="108" r="3" fill="rgba(201,168,76,.8)"/>
+      <!-- Body -->
+      <ellipse cx="140" cy="230" rx="60" ry="80" fill="rgba(201,168,76,.08)" stroke="rgba(201,168,76,.25)" stroke-width="1"/>
+      <!-- Arms -->
+      <path d="M80 200 Q40 240 50 280" stroke="rgba(201,168,76,.35)" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M200 200 Q240 240 230 280" stroke="rgba(201,168,76,.35)" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- Branch it sits on -->
+      <path d="M20 290 Q140 275 260 290" stroke="rgba(201,168,76,.45)" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <!-- Mangrove leaves -->
+      <ellipse cx="50" cy="270" rx="20" ry="10" fill="rgba(30,74,46,.4)" stroke="rgba(30,74,46,.6)" stroke-width=".8" transform="rotate(-20 50 270)"/>
+      <ellipse cx="230" cy="265" rx="22" ry="11" fill="rgba(30,74,46,.4)" stroke="rgba(30,74,46,.6)" stroke-width=".8" transform="rotate(15 230 265)"/>
+      <!-- Text label -->
+      <text x="140" y="345" text-anchor="middle" font-family="'Cormorant Garamond',serif" font-size="13" fill="rgba(201,168,76,.6)" letter-spacing="2" font-style="italic">Nasalis larvatus</text>
+      <!-- Decorative Tidung diamond -->
+      <path d="M140 10L165 35L140 60L115 35Z" stroke="rgba(201,168,76,.4)" stroke-width=".8" fill="none"/>
+      <circle cx="140" cy="35" r="3" fill="rgba(201,168,76,.5)"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ================================
+     UMKM UNGGULAN
+     ================================ -->
+<section class="sec sec-alt" id="umkm">
+  <div class="wrap">
+    <div class="sec-row">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Direktori UMKM</div></div>
+        <h2 class="sec-h rv d1">UMKM <em>Unggulan</em><br>Kota Tarakan</h2>
+        <div class="div-line rv d2"></div>
+      </div>
+      <a class="sec-lnk rv" href="#">Lihat Semua <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="bento">
+      <div class="bc ft rv">
+        <div class="bc-img">
+          <!-- Nelayan/pasar ikan Tarakan -->
+          <img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fish_market_indonesia.jpg/800px-Fish_market_indonesia.jpg" src="" alt="UD Sari Laut">
+          <div class="bc-imgov"></div>
+        </div>
+        <div class="bc-body">
+          <div class="bc-tag">Perikanan · Terverifikasi</div>
+          <div class="bc-name">UD. Sari Laut Tarakan</div>
+          <div class="bc-meta"><span>📍 Tarakan Barat</span><span>★ 4.9 · 128 ulasan</span></div>
+          <div class="bc-desc">Pengolahan hasil laut premium khas Tarakan — abon ikan tenggiri, kerupuk udang, produk perikanan artisanal sejak 1998.</div>
+          <div class="bc-foot"><div class="bc-rat">★★★★★ 4.9</div><a class="bc-lnk" href="#">Kunjungi Toko →</a></div>
+        </div>
+      </div>
+      <div class="bc rv d1">
+        <div class="bc-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Batik_indonesia.jpg/640px-Batik_indonesia.jpg" src="" alt="Batik"><div class="bc-imgov"></div></div>
+        <div class="bc-body">
+          <div class="bc-tag">Fashion · Terverifikasi</div>
+          <div class="bc-name">Batik Paguntaka</div>
+          <div class="bc-meta"><span>📍 Tarakan Tengah</span><span>★ 5.0</span></div>
+          <div class="bc-desc">Batik motif Tidung & Kalimantan edisi premium. Setiap helai adalah karya seni leluhur.</div>
+          <div class="bc-foot"><div></div><a class="bc-lnk" href="#">Kunjungi →</a></div>
+        </div>
+      </div>
+      <div class="bc rv d2">
+        <div class="bc-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Rattan_basket_Indonesia.jpg/640px-Rattan_basket_Indonesia.jpg" src="" alt="Kerajinan Rotan"><div class="bc-imgov"></div></div>
+        <div class="bc-body">
+          <div class="bc-tag">Kerajinan · Terverifikasi</div>
+          <div class="bc-name">Kriya Borneo Craft</div>
+          <div class="bc-meta"><span>📍 Tarakan Timur</span><span>★ 4.7</span></div>
+          <div class="bc-desc">Anyaman rotan & manik Dayak — tas, dompet, dekorasi artisan Kalimantan.</div>
+          <div class="bc-foot"><div></div><a class="bc-lnk" href="#">Kunjungi →</a></div>
+        </div>
+      </div>
+      <div class="bc rv d3">
+        <div class="bc-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Indonesian_seafood.jpg/640px-Indonesian_seafood.jpg" src="" alt="Kuliner"><div class="bc-imgov"></div></div>
+        <div class="bc-body">
+          <div class="bc-tag">Kuliner</div>
+          <div class="bc-name">Dapur Mama Ida</div>
+          <div class="bc-meta"><span>📍 Tarakan Utara</span><span>★ 4.8</span></div>
+          <div class="bc-desc">Cita rasa otentik masakan khas Tarakan — oleh-oleh premium pilihan.</div>
+          <div class="bc-foot"><div></div><a class="bc-lnk" href="#">Kunjungi →</a></div>
+        </div>
+      </div>
+      <div class="bc rv d4">
+        <div class="bc-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Honey_jar.jpg/640px-Honey_jar.jpg" src="" alt="Madu Hutan"><div class="bc-imgov"></div></div>
+        <div class="bc-body">
+          <div class="bc-tag">Pertanian</div>
+          <div class="bc-name">Hutan Alami Kaltara</div>
+          <div class="bc-meta"><span>📍 Tarakan Selatan</span><span>★ 4.9</span></div>
+          <div class="bc-desc">Madu hutan murni Kalimantan Utara — dipanen dari lebah liar alami.</div>
+          <div class="bc-foot"><div></div><a class="bc-lnk" href="#">Kunjungi →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     PRODUK PILIHAN
+     ================================ -->
+<section class="sec" id="produk">
+  <div class="wrap">
+    <div class="sec-row">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Produk Pilihan</div></div>
+        <h2 class="sec-h rv d1">Karya Tangan<br><em>Anak Tarakan</em></h2>
+        <div class="div-line rv d2"></div>
+      </div>
+      <a class="sec-lnk rv" href="#">Semua Produk <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="prod-grid">
+      <a class="pk rv" href="#">
+        <div class="pk-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fish_market_indonesia.jpg/500px-Fish_market_indonesia.jpg" src="" alt="Abon Ikan"><div class="pk-bdg">Terlaris</div><button class="pk-wish">♡</button></div>
+        <div class="pk-brand">UD. Sari Laut</div>
+        <div class="pk-name">Abon Ikan Tenggiri Khas Tarakan</div>
+        <div class="pk-bot"><div class="pk-price">Rp 45.000</div><div class="pk-star">★★★★★ 4.9</div></div>
+      </a>
+      <a class="pk rv d1" href="#">
+        <div class="pk-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Batik_indonesia.jpg/500px-Batik_indonesia.jpg" src="" alt="Batik"><button class="pk-wish">♡</button></div>
+        <div class="pk-brand">Batik Paguntaka</div>
+        <div class="pk-name">Batik Tidung Motif Bekantan Premium</div>
+        <div class="pk-bot"><div class="pk-price">Rp 185.000</div><div class="pk-star">★★★★★ 5.0</div></div>
+      </a>
+      <a class="pk rv d2" href="#">
+        <div class="pk-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Rattan_basket_Indonesia.jpg/500px-Rattan_basket_Indonesia.jpg" src="" alt="Rotan"><div class="pk-bdg">Pilihan Editor</div><button class="pk-wish">♡</button></div>
+        <div class="pk-brand">Kriya Borneo</div>
+        <div class="pk-name">Anyaman Rotan Artisan Borneo</div>
+        <div class="pk-bot"><div class="pk-price">Rp 120.000</div><div class="pk-star">★★★★ 4.7</div></div>
+      </a>
+      <a class="pk rv d3" href="#">
+        <div class="pk-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Honey_jar.jpg/500px-Honey_jar.jpg" src="" alt="Madu"><button class="pk-wish">♡</button></div>
+        <div class="pk-brand">Hutan Alami</div>
+        <div class="pk-name">Madu Hutan Kalimantan Raw 500ml</div>
+        <div class="pk-bot"><div class="pk-price">Rp 95.000</div><div class="pk-star">★★★★★ 4.9</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     PETA
+     ================================ -->
+<section class="sec sec-alt">
+  <div class="wrap">
+    <div class="peta-wrap">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Sebaran Wilayah</div></div>
+        <h2 class="sec-h rv d1">Peta <em>UMKM</em><br>Kota Tarakan</h2>
+        <p class="sec-sub rv d2">2.400+ UMKM tersebar di 4 kecamatan Kota Tarakan — Tarakan Barat, Tengah, Utara, dan Timur. Temukan usaha terdekat dari lokasi Anda.</p>
+        <a class="h-cta1 rv d3" href="#" style="display:inline-flex;gap:10px">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Buka Peta Interaktif
+        </a>
+      </div>
+      <div class="peta-map rv d2">
+        <div class="peta-map-grid"></div>
+        <div class="peta-glow"></div>
+        <!-- Pins represent 4 kecamatan Tarakan -->
+        <div class="map-pin" style="left:27%;top:55%">
+          <div class="pin-dot" style="background:var(--gold);border-color:var(--gold)"></div>
+          <div class="pin-lbl">Tarakan Barat</div><div class="pin-sub">842 UMKM</div>
+        </div>
+        <div class="map-pin" style="left:50%;top:48%">
+          <div class="pin-dot" style="background:var(--greenb);border-color:var(--greenb)"></div>
+          <div class="pin-lbl">Tarakan Tengah</div><div class="pin-sub">560 UMKM</div>
+        </div>
+        <div class="map-pin" style="left:64%;top:22%">
+          <div class="pin-dot" style="background:var(--gold);border-color:var(--gold)"></div>
+          <div class="pin-lbl">Tarakan Utara</div><div class="pin-sub">394 UMKM</div>
+        </div>
+        <div class="map-pin" style="left:72%;top:62%">
+          <div class="pin-dot" style="background:var(--greenb);border-color:var(--greenb)"></div>
+          <div class="pin-lbl">Tarakan Timur</div><div class="pin-sub">604 UMKM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     PROGRAM
+     ================================ -->
+<section class="sec" id="program">
+  <div class="wrap">
+    <div class="sec-row">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Dukungan Pemerintah</div></div>
+        <h2 class="sec-h rv d1">Program <em>Unggulan</em><br>untuk UMKM</h2>
+        <div class="div-line rv d2"></div>
+      </div>
+    </div>
+    <div class="prog-grid rv d1">
+      <div class="pg">
+        <div class="pg-num">01 — Program Utama</div>
+        <div class="pg-icon">💻</div>
+        <div class="pg-name">Pelatihan Digital Marketing</div>
+        <div class="pg-desc">Kelas gratis strategi pemasaran digital — media sosial, marketplace, SEO, dan personal branding untuk UMKM Tarakan. Tersedia online & offline setiap bulan.</div>
+        <a class="pg-lnk" href="#">Daftar Sekarang <svg width="10" height="10" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="pg">
+        <div class="pg-num">02 — Permodalan</div>
+        <div class="pg-icon">💳</div>
+        <div class="pg-name">Akses Permodalan KUR</div>
+        <div class="pg-desc">Kemudahan akses Kredit Usaha Rakyat dengan bunga rendah 3% per tahun. Pinjaman hingga Rp 500 juta tanpa agunan untuk UMKM terdaftar resmi.</div>
+        <a class="pg-lnk" href="#">Info Permodalan <svg width="10" height="10" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="pg">
+        <div class="pg-num">03 — Legalitas Usaha</div>
+        <div class="pg-icon">📋</div>
+        <div class="pg-name">Sertifikasi & Perizinan</div>
+        <div class="pg-desc">Bantuan pengurusan NIB, PIRT, sertifikasi Halal MUI, BPOM, dan berbagai perizinan usaha gratis untuk meningkatkan kepercayaan konsumen.</div>
+        <a class="pg-lnk" href="#">Mulai Proses <svg width="10" height="10" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================
+     BERITA
+     ================================ -->
+<section class="sec sec-alt" id="berita">
+  <div class="wrap">
+    <div class="sec-row">
+      <div>
+        <div class="eye rv"><div class="eye-line"></div><div class="eye-txt">Informasi Terkini</div></div>
+        <h2 class="sec-h rv d1">Berita & <em>Program</em><br>UMKM</h2>
+        <div class="div-line rv d2"></div>
+      </div>
+      <a class="sec-lnk rv" href="http://portal.tarakankota.go.id/category/berita">Semua Berita <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="berita-grid rv d1">
+      <a class="bh" href="#">
+        <div class="bh-img">
+          <!-- Foto rapat/pertemuan pemerintah -->
+          <img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Indonesia_Government_Meeting.jpg/800px-Indonesia_Government_Meeting.jpg" src="" alt="Berita Utama">
+          <div class="bh-ov"></div>
+        </div>
+        <div class="bh-body">
+          <div class="bh-tag">Program Pemerintah</div>
+          <div class="bh-title">Pemkot Tarakan Luncurkan Program Digitalisasi 1000 UMKM Lokal Tahun 2025</div>
+          <p class="bh-ex">Program ambisius ini mentransformasi UMKM Tarakan ke ekosistem digital — pemasaran online, pembayaran digital, hingga akses pasar nasional.</p>
+          <div class="bh-date">15 Januari 2025</div>
+        </div>
+      </a>
+      <div class="bl-list">
+        <a class="bl" href="#">
+          <div class="bl-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Digital_marketing.jpg/200px-Digital_marketing.jpg" src="" alt="Pelatihan"></div>
+          <div class="bl-body"><div class="bl-tag">Pelatihan</div><div class="bl-title">Digital Marketing Gratis untuk UMKM Tarakan</div><div class="bl-date">12 Januari 2025</div></div>
+        </a>
+        <a class="bl" href="#">
+          <div class="bl-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Award_ceremony.jpg/200px-Award_ceremony.jpg" src="" alt="Penghargaan"></div>
+          <div class="bl-body"><div class="bl-tag">Prestasi</div><div class="bl-title">UMKM Tarakan Raih Penghargaan Produk Terbaik Kaltara 2024</div><div class="bl-date">8 Januari 2025</div></div>
+        </a>
+        <a class="bl" href="#">
+          <div class="bl-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Indonesian_Rupiah.jpg/200px-Indonesian_Rupiah.jpg" src="" alt="KUR"></div>
+          <div class="bl-body"><div class="bl-tag">Permodalan</div><div class="bl-title">KUR UMKM 2025 — Pinjaman hingga Rp 500 Juta, Bunga Rendah</div><div class="bl-date">3 Januari 2025</div></div>
+        </a>
+        <a class="bl" href="#">
+          <div class="bl-img"><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pasar_tradisional.jpg/200px-Pasar_tradisional.jpg" src="" alt="Pameran"></div>
+          <div class="bl-body"><div class="bl-tag">Event</div><div class="bl-title">Pameran UMKM Tarakan 2025 — 200+ Stan Pelaku Usaha Lokal</div><div class="bl-date">28 Desember 2024</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner rv">
+  <svg class="cb-motif" viewBox="0 0 260 260" fill="none">
+    <path d="M130 5L255 130L130 255L5 130Z" stroke="#c9a84c" stroke-width="1.5"/>
+    <path d="M130 40L220 130L130 220L40 130Z" stroke="#c9a84c" stroke-width="1"/>
+    <circle cx="130" cy="130" r="6" fill="#c9a84c" opacity=".5"/>
+    <circle cx="130" cy="5" r="3" fill="#c9a84c" opacity=".4"/>
+    <circle cx="130" cy="255" r="3" fill="#c9a84c" opacity=".4"/>
+    <circle cx="5" cy="130" r="3" fill="#c9a84c" opacity=".4"/>
+    <circle cx="255" cy="130" r="3" fill="#c9a84c" opacity=".4"/>
+    <path d="M5 130H255M130 5V255" stroke="#c9a84c" stroke-width=".3" opacity=".3"/>
+  </svg>
+  <div>
+    <h2 class="cb-title">Jadikan Usaha Anda<br><em>Bagian dari Tarakan</em></h2>
+    <p class="cb-desc">Daftarkan UMKM Anda secara gratis dan dapatkan akses ke ribuan pembeli, program pelatihan eksklusif, serta pendampingan dari Dinas Koperasi & UMKM Kota Tarakan.</p>
+  </div>
+  <div class="cb-btns">
+    <a class="cb-b1" href="#">Daftar UMKM — Gratis</a>
+    <a class="cb-b2" href="#">Hubungi Dinas UMKM</a>
+  </div>
+</div>
+
+<!-- ================================
+     FOOTER
+     ================================ -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">
+        <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+          <path d="M18 1L35 18L18 35L1 18Z" stroke="#c9a84c" stroke-width="1.2" fill="none"/>
+          <path d="M18 7L29 18L18 29L7 18Z" stroke="#c9a84c" stroke-width=".8" fill="none" opacity=".6"/>
+          <circle cx="18" cy="18" r="3.5" fill="#c9a84c" opacity=".8"/>
+        </svg>
+        <div class="ft-brand">
+          <strong>UMKM Tarakan</strong>
+          <span>Bumi Paguntaka</span>
+        </div>
+      </div>
+      <p class="ft-desc">Platform digital resmi UMKM Kota Tarakan, Kalimantan Utara — mendukung pertumbuhan ekonomi lokal berbasis identitas budaya Suku Tidung.</p>
+      <div class="ft-soc">
+        <a class="ft-s" href="#">Fb</a>
+        <a class="ft-s" href="#">Ig</a>
+        <a class="ft-s" href="#">Tw</a>
+        <a class="ft-s" href="#">Yt</a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h4>Kategori UMKM</h4>
+      <a href="http://portal.tarakankota.go.id/page/umkm-kuliner">Kuliner</a>
+      <a href="http://portal.tarakankota.go.id/page/umkm-fashion/">Fashion & Tekstil</a>
+      <a href="http://portal.tarakankota.go.id/page/umkm-pertanian/">Pertanian</a>
+      <a href="http://portal.tarakankota.go.id/page/umkm-perikanan/">Perikanan</a>
+      <a href="http://portal.tarakankota.go.id/page/umkm-peternakan/">Peternakan</a>
+      <a href="http://portal.tarakankota.go.id/page/umkm-jasa/">Jasa</a>
+    </div>
+    <div class="ft-col">
+      <h4>Program</h4>
+      <a href="#">Pelatihan Digital</a>
+      <a href="#">Permodalan KUR</a>
+      <a href="#">Sertifikasi Produk</a>
+      <a href="#">Pameran UMKM</a>
+      <a href="#">Pendampingan Usaha</a>
+    </div>
+    <div class="ft-col">
+      <h4>Kontak Resmi</h4>
+      <a href="http://portal.tarakankota.go.id">portal.tarakankota.go.id</a>
+      <a href="#">📍 Jl. Kalimantan No.1, Tarakan</a>
+      <a href="#">📞 (0551) 51234</a>
+      <a href="#">✉️ mailbox@tarakankota.go.id</a>
+      <a href="#">🕐 Senin–Jumat 08.00–16.00 WITA</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 Pemerintah Kota Tarakan, Kalimantan Utara. Hak cipta dilindungi undang-undang.</p>
+    <div class="ft-bot-lnks">
+      <a href="#">Kebijakan Privasi</a>
+      <a href="#">Aksesibilitas</a>
+      <a href="#">Peta Situs</a>
+    </div>
+    <span class="ft-cr">v2025.2 · Powered by AI for Tarakan</span>
+  </div>
+</footer>
+
+<script>
+// ========== LOADER ==========
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('off'), 1000));
+
+// ========== CURSOR ==========
+const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+(function lerp(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(lerp); })();
+document.querySelectorAll('a,button,.kat-card,.bc,.pk').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cur.style.width='14px';cur.style.height='14px';ring.style.width='48px';ring.style.height='48px'; });
+  el.addEventListener('mouseleave',()=>{ cur.style.width='7px';cur.style.height='7px';ring.style.width='34px';ring.style.height='34px'; });
+});
+
+// ========== NAVBAR ==========
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+
+// ========== REVEAL ==========
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } }), { threshold:.1, rootMargin:'0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+// ========== SMART IMAGE LOADER ==========
+// Multi-CDN fallback system - tries each URL in order
+const PHOTO_SOURCES = {
+  // Hero: Foto udara Kota Tarakan / pesisir Kalimantan
+  'hero': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Tarakan_City.jpg/1200px-Tarakan_City.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Kota_Tarakan.jpg/1200px-Kota_Tarakan.jpg',
+    'https://images.pexels.com/photos/417142/pexels-photo-417142.jpeg?w=1600',
+    'https://picsum.photos/seed/coastal-city/1600/900'
+  ],
+  // Kuliner
+  'kuliner': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Indonesian_seafood.jpg/640px-Indonesian_seafood.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Nasi_goreng_02.jpg/640px-Nasi_goreng_02.jpg',
+    'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400',
+    'https://picsum.photos/seed/food-market/400/580'
+  ],
+  // Batik
+  'batik': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Batik_indonesia.jpg/640px-Batik_indonesia.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Batik_Kalimantan.jpg/640px-Batik_Kalimantan.jpg',
+    'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?w=400',
+    'https://picsum.photos/seed/batik-cloth/400/580'
+  ],
+  // Pertanian
+  'pertanian': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Green_Tea_Field.jpg/640px-Green_Tea_Field.jpg',
+    'https://images.pexels.com/photos/1595108/pexels-photo-1595108.jpeg?w=400',
+    'https://picsum.photos/seed/farm-field/400/580'
+  ],
+  // Perikanan: nelayan Indonesia
+  'perikanan': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Fisherman_Indonesia.jpg/640px-Fisherman_Indonesia.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Fishing_boat_Indonesia.jpg/640px-Fishing_boat_Indonesia.jpg',
+    'https://images.pexels.com/photos/229550/pexels-photo-229550.jpeg?w=400',
+    'https://picsum.photos/seed/fishing-boat/400/580'
+  ],
+  // Peternakan / hutan Borneo
+  'peternakan': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Borneo_Rainforest.jpg/640px-Borneo_Rainforest.jpg',
+    'https://images.pexels.com/photos/422218/pexels-photo-422218.jpeg?w=400',
+    'https://picsum.photos/seed/forest-green/400/580'
+  ],
+  // Jasa / kota Tarakan
+  'jasa': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Tarakan_City.jpg/640px-Tarakan_City.jpg',
+    'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?w=400',
+    'https://picsum.photos/seed/city-service/400/580'
+  ],
+  // Budaya feature: mangrove sunset
+  'mangrove': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Mangrove_Forest.jpg/1280px-Mangrove_Forest.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Mangrove_Borneo.jpg/1280px-Mangrove_Borneo.jpg',
+    'https://images.pexels.com/photos/1770809/pexels-photo-1770809.jpeg?w=1280',
+    'https://picsum.photos/seed/mangrove-sunset/1280/520'
+  ],
+  // Pasar ikan
+  'pasar-ikan': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Fish_market_indonesia.jpg/800px-Fish_market_indonesia.jpg',
+    'https://images.pexels.com/photos/725255/pexels-photo-725255.jpeg?w=700',
+    'https://picsum.photos/seed/fish-market/700/900'
+  ],
+  // Rotan
+  'rotan': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Rattan_basket_Indonesia.jpg/640px-Rattan_basket_Indonesia.jpg',
+    'https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?w=600',
+    'https://picsum.photos/seed/rattan-craft/600/740'
+  ],
+  // Madu
+  'madu': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Honey_bee_on_flower.jpg/640px-Honey_bee_on_flower.jpg',
+    'https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg?w=600',
+    'https://picsum.photos/seed/honey-jar/600/740'
+  ],
+  // Berita meeting
+  'berita-meeting': [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Government_meeting_Indonesia.jpg/800px-Government_meeting_Indonesia.jpg',
+    'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?w=800',
+    'https://picsum.photos/seed/govt-meeting/800/420'
+  ],
+  // Berita list
+  'bl-1': ['https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?w=200','https://picsum.photos/seed/training1/200/200'],
+  'bl-2': ['https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?w=200','https://picsum.photos/seed/award2/200/200'],
+  'bl-3': ['https://images.pexels.com/photos/164527/pexels-photo-164527.jpeg?w=200','https://picsum.photos/seed/money3/200/200'],
+  'bl-4': ['https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?w=200','https://picsum.photos/seed/expo4/200/200'],
+};
+
+// Dark gradient fallbacks for each category (shown if all URLs fail)
+const GRADIENTS = {
+  'hero':      'linear-gradient(135deg,#0a1a0a 0%,#1e3a2e 50%,#0a1020 100%)',
+  'kuliner':   'linear-gradient(160deg,#3d1a0a,#7a3520)',
+  'batik':     'linear-gradient(160deg,#1a0a3d,#3d1a6e)',
+  'pertanian': 'linear-gradient(160deg,#0a2d0a,#1a5c20)',
+  'perikanan': 'linear-gradient(160deg,#0a1a3d,#0a3d5c)',
+  'peternakan':'linear-gradient(160deg,#2d2000,#4a3800)',
+  'jasa':      'linear-gradient(160deg,#1a1a2d,#2d2d4a)',
+  'mangrove':  'linear-gradient(160deg,#0a2010,#1a3a1a)',
+  'default':   'linear-gradient(160deg,#111410,#1c2019)',
+};
+
+function smartLoad(el, key, isBg) {
+  const sources = PHOTO_SOURCES[key] || [];
+  const grad = GRADIENTS[key] || GRADIENTS.default;
+  let i = 0;
+  function next() {
+    if(i >= sources.length) {
+      if(isBg) el.style.backgroundImage = grad;
+      else { el.style.display='none'; if(el.parentElement) el.parentElement.style.background=grad; }
+      return;
+    }
+    const url = sources[i++];
+    if(isBg) {
+      const t = new Image();
+      t.onload = () => el.style.backgroundImage = `url(${url})`;
+      t.onerror = next;
+      t.src = url;
+    } else {
+      el.onerror = next;
+      el.src = url;
+    }
+  }
+  next();
+}
+
+// Map data-src images to their keys
+const IMG_KEY_MAP = [
+  ['img[alt="Kota Tarakan dari udara"]', 'hero', false],
+  ['img[alt="Kuliner Tarakan"]', 'kuliner', false],
+  ['img[alt="Fashion Batik"]', 'batik', false],
+  ['img[alt="Pertanian"]', 'pertanian', false],
+  ['img[alt="Perikanan"]', 'perikanan', false],
+  ['img[alt="Peternakan"]', 'peternakan', false],
+  ['img[alt="Jasa Tarakan"]', 'jasa', false],
+  ['img[alt="Mangrove Tarakan"]', 'mangrove', false],
+  ['img[alt="UD Sari Laut"]', 'pasar-ikan', false],
+  ['img[alt="Batik"]', 'batik', false],
+  ['img[alt="Kerajinan Rotan"]', 'rotan', false],
+  ['img[alt="Kuliner"]', 'kuliner', false],
+  ['img[alt="Madu Hutan"]', 'madu', false],
+  ['img[alt="Abon Ikan"]', 'pasar-ikan', false],
+  ['img[alt="Rotan"]', 'rotan', false],
+  ['img[alt="Madu"]', 'madu', false],
+  ['img[alt="Berita Utama"]', 'berita-meeting', false],
+  ['img[alt="Pelatihan"]', 'bl-1', false],
+  ['img[alt="Penghargaan"]', 'bl-2', false],
+  ['img[alt="KUR"]', 'bl-3', false],
+  ['img[alt="Pameran"]', 'bl-4', false],
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  IMG_KEY_MAP.forEach(([sel, key]) => {
+    document.querySelectorAll(sel).forEach(img => smartLoad(img, key, false));
+  });
+  // Hero bg special: parallax + loaded class
+  const heroImg = document.getElementById('heroImg');
+  if(heroImg) {
+    smartLoad(heroImg, 'hero', false);
+    heroImg.addEventListener('load', () => heroImg.classList.add('loaded'));
+  }
+});
+
+// ========== PARALLAX HERO ==========
+window.addEventListener('scroll', () => {
+  const y = scrollY, vh = window.innerHeight;
+  if(y < vh) document.querySelector('.hero-img').style.transform = `translateY(${y*0.22}px)`;
+});
+
+// ========== WISHLIST ==========
+document.querySelectorAll('.pk-wish').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+    btn.style.color = btn.textContent === '♥' ? 'var(--gold)' : '';
+  });
+});
+</script>
+</body>
+</html>
